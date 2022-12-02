@@ -3,6 +3,7 @@ let screen = document.getElementById('answer'); //это инпут если ч�
 buttons = document.querySelectorAll('button');
 let screenValue = '';
 
+
 for (item of buttons) {
   item.addEventListener('click', (event) => {
     buttonText = event.target.innerText;
@@ -24,7 +25,6 @@ for (item of buttons) {
     
     else if (buttonText == '=') {
       checkForBracketMulti(); // автоматически считает, если нет скобок
-      return;
       //а тут собсна само очищение
     } else {
       screenValue += buttonText;
@@ -33,51 +33,49 @@ for (item of buttons) {
   });
 }
 
-document.addEventListener('keydown', function (event) {
-  console.log(event);
-  if (event.shiftKey == 57) {
-    event.key = '(';
-  } else if (event.shiftKey == 48) {
-    event.key = ')';
-  } else if (event.shiftKey == 53) {
-    event.key = '%';
-  }
-  if (event.key == 88) {
-    screenValue += '*';
-    screen.value = screenValue;
-  }
-  if (
-    event.key <= 9 ||
-    event.key == '+' ||
-    event.key == '-' ||
-    event.key == '*' ||
-    event.key == '.' ||
-    event.key == '/' ||
-    event.key == '%' ||
-    event.key == '(' ||
-    event.key == ')'
-  ) {
-    screenValue += event.key;
-    screen.value = screenValue;
-  }
+document.addEventListener("keydown", function (event) {
+    if (event.shiftKey == 'Digit9') {
+        event.key = "(";
+    } else if (event.shiftKey == 'Digit0') {
+        event.key = ")";
+    } else if (event.shiftKey == "Digit5") {
+        event.key = "%";
+    }
+    if (event.key == 'KeyX') {
+        screenValue += "*";
+        screen.value = screenValue;
+    }
+    if (
+        event.key <= 9 ||
+        event.key == "+" ||
+        event.key == "-" ||
+        event.key == "*" ||
+        event.key == "." ||
+        event.key == "/" ||
+        event.key == "%" ||
+        event.key == "(" ||
+        event.key == ")"
+    ) {
+        screenValue += event.key;
+        screen.value = screenValue;
+    }
+    if (event.key == 'Enter' || event.key == 'Add') {
+        checkForBracketMulti(); // automatically evaluates if no brackets
+    } else if (event.key == 'Delete') {
+        screenValue = "";
+        screen.value = screenValue;
+        console.clear();
+    } else if (event.key == 'Backspace') {
+        screenValue = screenValue.slice(0, -1);
+        screen.value = screenValue;
 
-  if (event.key == 13 || event.key == 187) {
-    checkForBracketMulti();
-// автоматически оценивает, если нет скобок
-  } else if (event.key == 46) {
-    screenValue = '';
-    screen.value = screenValue;
-    console.clear();
-  } else if (event.key == 8) {
-    screenValue = screenValue.slice(0, -1);
-    screen.value = screenValue;
-  } else if (event.key == 67) {
-    screenValue = '';
-    screen.value = screenValue;
-    console.clear();
-  } else if (event.key == 82) {
-    location.reload();
-  }
+    } else if (event.key == 'KeyC') {
+        screenValue = "";
+        screen.value = screenValue;
+        console.clear();
+    } else if (event.key == 'KeyR') {
+        location.reload();
+    }
 });
 
 window.onerror = function () {
@@ -91,7 +89,7 @@ window.onerror = function () {
 window.onBracketMultiplication = function () {
   //indexof -- поиск значений в массиве
   screenValue = addStr(screen.value, screen.value.indexOf('('), '*');
-  screen.value = evaluate(screenValue);
+  screen.value = eval(screenValue);
 };
 
 
@@ -105,6 +103,6 @@ function checkForBracketMulti() {
     window.onBracketMultiplication();
     return;
   } else {
-    screen.value = evaluate(screenValue);
+    screen.value = eval(screenValue);
   }
 }
